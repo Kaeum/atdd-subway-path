@@ -152,6 +152,24 @@ public class LineTest {
         assertThat(after).isEqualTo(before - 1);
     }
 
+    @DisplayName("하행 종점이 아닌 역 삭제 가능")
+    @Test
+    void removeSection_WhenStationIsNotFinal() {
+        //given
+        //강남----------정자-----미금
+        신분당선.addSection(new Section(신분당선, 정자역, 미금역, 5));
+
+        //when
+        //정자역 삭제
+        신분당선.removeSection(2L);
+
+        //then
+        //강남---------------미금
+        assertThat(신분당선.getStations()).isEqualTo(Arrays.asList(강남역, 미금역));
+        assertThat(신분당선.getStations()).doesNotContain(정자역);
+        assertThat(신분당선.getSections().get(0).getDistance()).isEqualTo(15);
+    }
+
     @DisplayName("구간이 하나인 노선에서 역 삭제 시 에러 발생")
     @Test
     void removeSectionNotEndOfList() {
